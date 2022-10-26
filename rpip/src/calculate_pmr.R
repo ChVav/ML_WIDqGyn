@@ -10,54 +10,6 @@ calculate_pmr <- function(folder, output, experimentname,
                           path = "relative", 
                           is.autotest = FALSE){
   
-  # find files: if required input files not present, stop; if files in output directory already exists, throw warning (preventing overwriting)
-  files <- list.files(folder)
-  curve <- grep("Standard Curve", files)
-  results <- grep("Results", files)
-  
-  if(length(curve) == 0){
-    stop("Error: file with standard curves not found")
-  }
-  
-  if(length(results) == 0){
-    stop("Error: results file not found in provided folder")
-  }
-  
-  if(dir.exists(output)){
-    cat(paste0("Output folder ", output, " already exists.\n"))
-  } else {
-    dir.create(output, recursive = TRUE)
-    cat(paste0("Output folder ", output, " created.\n"))
-  }
-  
-  output_folder <- list.files(output)
-  if(paste(experimentname, ".xlsx", sep = "") %in% output_folder == TRUE && write.results == TRUE){
-    stop("File with the same name already exists in the output folder. Please choose a unique name.")
-  }
-  
-  # Startup messages
-  if(isFALSE(is.autotest)){
-    msg1 <- ("[pmr_calc] PMR calculation starting...\n")
-  } else {
-    msg1 <- ("[pmr_calc] PMR calculation for automatic test run starting...\n")
-  }
-  msg2 <- paste0("[pmr_calc] Settings:\n[pmr_calc]    folder = ", folder, "\n[pmr_calc]    output = ", output, "\n[pmr_calc]    experiment name = ", experimentname, "\n[pmr_calc]    type = ", type, "\n[pmr_calc]    calib_fixed = ", calib_fixed, ifelse(isTRUE(calib_fixed), paste0(" (CAUTION: using fixed intercept/slope values)"), ""), "\n[pmr_calc]    threshold_COL2A1 = ", threshold_COL2A1, "\n[pmr_calc]    path = ", path, sep = "")
-  
-  cat(msg1)
-  cat(msg2)
-  
-  # Log message (including warning)
-  write(paste0("[pmr_calc] ", date()), file = paste0(output, experimentname, "_log.txt"), append = F)
-  write(paste0("[pmr_calc] Platform: ", .Platform$OS.type), file = paste0(output, experimentname, "_log.txt"), append = T)
-  write(msg2, file = paste0(output, experimentname, "_log.txt"), append = T)
-
-  
-  if(calib_fixed == TRUE){
-    write("\nWarning: instead of using the on-plate calibration curve, you are using FIXED values for the intercept and slope. Use this option with caution.\n",
-                file = paste0(output, experimentname, "_log.txt"), append = T)
-  }
-  
-  
   # Generate standard curve from COL2A1 values
   curve <- read.table(file = paste(folder, files[curve], sep = ""),
                       sep = ",",
