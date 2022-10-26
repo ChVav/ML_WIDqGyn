@@ -1,1 +1,1 @@
-R -e "shiny::runApp('./src/App.R',launch.browser=TRUE)
+R -e "shiny::runApp('./src/App2.R',launch.browser=TRUE)

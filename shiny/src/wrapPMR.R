@@ -23,10 +23,6 @@ calculate_pmr <- function(data,
   source("../../lib/calcPMRGyn.R")
   source("../../lib/testWIDqEC.R")
   
-  # WID-qEC thresholds
-  qEC_threshold1 <- 0.03
-  qEC_threshold2 <- 0.63 #this threshold is not used by Tyrolpath
-  
   # check that threshold targets >= threshold COL2A1
   if(threshold_COL2A1>threshold_targets){
     stop("Error: CT-threshold set for COL2A1 should be lower or equal to that for other targets")
@@ -65,15 +61,16 @@ calculate_pmr <- function(data,
   # based on default or user set thresholds
   # minimum two reps needed, not sure whether works for more
   
-  calcPMR <- calcPMRGyn(data,targets,samples,threshold_COL2A1, threshold_targets)
+  calcPMR <- calcPMRGyn(data,targets,samples,intercept, slope,threshold_COL2A1, threshold_targets)
   list_out <- append(list_out,calcPMR)
   
   ####---- Make the final summary commercial WIDqEC test ----####
   
   targets_qEC <- c("GYPC1","GYPC2","ZSCAN12")
   if(all(targets_qEC %in% targets)){
-    final <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]])
-    list_out[[9]] <- final #information in final csv file
+    testEC <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]])
+    list_out[[9]] <- testEC[[1]] #information in final csv file
+    list_out[[2]] <- testEC[[2]] #update final batch results
   }
   
   ####---- Return or save results ----####
