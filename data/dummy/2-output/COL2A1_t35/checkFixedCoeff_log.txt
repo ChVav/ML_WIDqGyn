@@ -1,0 +1,27 @@
+[pmr_calc] Mon Aug  8 20:45:58 2022
+[pmr_calc] Platform: windows
+[pmr_calc] Settings:
+[pmr_calc]    folder = C:/Users/charl/Dropbox/eutops/data/raw_data/methylight/ML_analpipe_testing/2-outputCHECK2/
+[pmr_calc]    output = C:/Users/charl/Dropbox/eutops/data/processed_data/methylight/ML_analpipe_testing/3-outputCHECK2/
+[pmr_calc]    experiment name = checkFixedCoeff
+[pmr_calc]    type = gblock
+[pmr_calc]    calib_fixed = TRUE (CAUTION: using fixed intercept/slope values)
+[pmr_calc]    threshold_COL2A1 = 35
+[pmr_calc]    path = relative
+
+Warning: instead of using the on-plate calibration curve, you are using FIXED values for the intercept and slope. Use this option with caution.
+
+Calibration curve R2 = 0.9942
+WARNING: Your on-plate calibration curve was not used for any calculations as you chose to use a fixed threshold.
+
+COL2A1 calibration curve saved under C:/Users/charl/Dropbox/eutops/data/processed_data/methylight/ML_analpipe_testing/3-outputCHECK2/checkFixedCoeff.png
+
+Samples with insufficient input DNA (plus 2 H2O controls): 0
+Samples that failed to amplify one of the targets in one replicate (reprocessing recommended): 35
+
+
+------------ AUTOTEST REPORT ------------
+All expected samples in output: Yes
+Values identical for all targets: Yes
+Autotest result: PASS
+------------ RUN DONE ------------

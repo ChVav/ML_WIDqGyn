@@ -10,7 +10,7 @@
  
 # Option for using fixed intercept or slope, or external calibration curve, will only be functional in the bare R-pipeline, not in the Shiny apps
 
-calcPMRGyn <- function(data,targets,samples,threshold_COL2A1, threshold_targets){
+calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, threshold_targets){
   
   require(dplyr)
   require(tidyverse)
@@ -159,12 +159,6 @@ calcPMRGyn <- function(data,targets,samples,threshold_COL2A1, threshold_targets)
   if(all(targets_qEC %in% targets)){
     results = results %>%
     mutate(WIDqEC = round((GYPC1 + GYPC2 + ZSCAN12), digits=3)) # calculate sumPMR for WID-qEC
-    results = results %>% 
-      mutate(WIDqEC_test = case_when(results$WIDqEC < qEC_threshold1 ~ "low risk EC/CIN",
-                                     results$WIDqEC >= qEC_threshold1 & results$WIDqEC <= qEC_threshold2 ~ "high risk EC/CIN",
-                                     results$WIDqEC > qEC_threshold2 ~ "very high risk EC/CIN")) %>%
-      mutate(WIDqEC_interpret = case_when(results$WIDqEC >= qEC_threshold1 ~ "Positiv",
-                                          TRUE ~ "Negativ"))
   }
   
   targets_qCIN = c("RALYL", "DPP6", "GSX1")
