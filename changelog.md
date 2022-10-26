@@ -1,5 +1,9 @@
 
-v0.1.4
+#v0.2.0
+* in /shiny; created extra functions for calibrating COL2A1 gblocks, PMR calculations and WIDqEC interpretation
+* in /shiny; added option for CT threshold targets (default 38); COL2A1 default threshold now 30
+
+#v0.1.4
 Implementation closest to R pipeline used in https://doi.org/10.1200/JCO.22.00266 and https://doi.org/10.1002/ijc.34275 is in /rpip
 Additions:
 * COL2A1 Ct threshold=35 (36 or higher is kicked out)

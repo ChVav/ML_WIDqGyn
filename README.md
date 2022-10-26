@@ -21,8 +21,11 @@ Use CalculatePMRGyn function is used to estimate Percentage Methylated Reference
 
 ## Instructions for using the Shiny app
 Users inexperienced with R may run the app version of the pipeline.
+
 Make sure R is installed and in your environment path.
 Libraries needed: shiny, readxl, stringr and dplyr.
+
 For Step1: Double-click GeneratePlatelayoutGYN.bat (or a short-cut thereof), and follow instructions in the browser.
 For Step2: Double-click CalculatePMRGyn.bat (or a short-cut thereof), and follow instructions in the browser. Here the The WID-qEC (+diagnosis) and WID-qCIN is also calculated.
+
 In contrast to the original pipeline, there is no way to use external standards or a fixed intercept/slow in case the standards on the plate have failed.

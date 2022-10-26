@@ -14,8 +14,8 @@ library(openxlsx)
 library(ggplot2)
 library(ggpubr)
 
-# source main calculate_PMR function
-source("./calculate_pmr_gyn.R")
+# source main wrapper function
+source("./wrapPMR.R")
 
 # Define UI ----
 ui <- fluidPage(
