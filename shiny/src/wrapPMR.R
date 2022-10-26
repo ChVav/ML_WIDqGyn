@@ -7,8 +7,7 @@
 calculate_pmr <- function(data,
                           threshold_COL2A1=30,
                           threshold_targets=38,
-                          external_curve=FALSE,
-                          curve=NULL,
+                          external_curve=NULL,
                           fix_intercept=36.9, #these values come from meta-analysis
                           fix_slope=-3.4,
                           calib_fixed=FALSE){
@@ -42,7 +41,7 @@ calculate_pmr <- function(data,
   # add plot to list
   list_out[[1]] <- calibration[[1]]
   
-  # If user choose fixed values overwrite the coefficients from standard curve
+  # If user choose fixed values, overwrite the coefficients from standard curve
   if(calib_fixed==TRUE){
     intercept <- fix_intercept
     slope <- fix_slope

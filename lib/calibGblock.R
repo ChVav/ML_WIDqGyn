@@ -5,6 +5,7 @@ calibGblock <- function(data){
   
   # check whether libraries already loaded
   require(dplyr)
+  require(tidyverse)
   require(ggplot2)
   require(ggpubr)
   
