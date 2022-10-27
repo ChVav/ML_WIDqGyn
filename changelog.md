@@ -1,4 +1,10 @@
 
+## [1.1.1] - 27.10.2022 - Released
+
+### Added
+* in /rpip, implemented option for using external calibration curve
+* this version was to recalibrate the CT thresholds using the Barcelon selfsamples
+
 ## [1.0.0] - 26.10.2022
 
 rpip and shiny are now compatible and use the same default thresholds
