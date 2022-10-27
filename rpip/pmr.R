@@ -10,7 +10,7 @@
 # Variables:
 #   - calib_fixed: Instead of using the on-plate calibration curve, fixed values for intercept and slope
 #     can be used.
-#   - external_curve: Instead of using the on-plate calibration curve, an external calibration curve (run on a different plate may be used)
+#   - external_curve: Instead of using the on-plate calibration curve, an external calibration curve (run on a different plate may be used), the gblock positive control will be taken from this plate
 #   - path: relative (default: location in raw data folder) or fixed (input from other locations)
 #   - autotest: perform autotest (default=FALSE)
 #
@@ -23,7 +23,7 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
                 write.results = TRUE,
                 threshold_COL2A1=30,
                 threshold_targets=38,
-                external_curve=NULL,
+                external_curve=NULL, #filename external curve in folder
                 calib_fixed = FALSE,
                 fix_intercept = 36.9,
                 fix_slope = -3.4,
@@ -61,6 +61,7 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   }
   
   source(paste0(path_lib,"calibGblock.R"))
+  source(paste0(path_lib,"calcPMRGyn_extcurve.R"))
   source(paste0(path_lib,"calcPMRGyn.R"))
   source(paste0(path_lib,"testWIDqEC.R"))
   
@@ -71,12 +72,14 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   
   # find files: if required input files not present, stop; if files in output directory already exists, throw warning (preventing overwriting)
   files <- list.files(folder)
-  #curve <- grep("Standard Curve", files)
-  results <- grep("Results", files)
+  if(!is.null(external_curve)) {curve <- grep(external_curve, files)}
+  results <- grep("Results_", files)
   
-  #if(length(curve) == 0){
-  #  stop("Error: file with standard curves not found")
-  #}
+  if(!is.null(external_curve)){
+    if(length(curve) == 0){
+      stop("Error: file with standard curves not found")
+    }
+  }
   
   if(length(results) == 0){
     stop("Error: results file not found in provided folder")
@@ -97,7 +100,7 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   # Startup messages
   cat("PMR calculation starting...\n")
   
-  msg2 <- paste0("[pmr] Settings:\n [pmr] folder = ", folder, "\n [pmr] output = ", output, "\n [pmr] experiment name = ", experimentname, "\n [pmr] threshold_COL2A1 = ", threshold_COL2A1, "\n [pmr] threshold_targets = ", threshold_targets, "\n [pmr] external_curve = ", external_curve, ifelse(external_curve!=NULL, paste0(" (CAUTION: using external calibration curve)"), ""), "\n [pmr] calib_fixed = ", calib_fixed, ifelse(isTRUE(calib_fixed), paste0(" (CAUTION: using fixed intercept/slope values)"), ""), "\n [pmr] path = ", path, sep = "","\n")
+  msg2 <- paste0("[pmr] Settings:\n [pmr] folder = ", folder, "\n [pmr] output = ", output, "\n [pmr] experiment name = ", experimentname, "\n [pmr] threshold_COL2A1 = ", threshold_COL2A1, "\n [pmr] threshold_targets = ", threshold_targets, "\n [pmr] external_curve = ", external_curve, ifelse(!is.null(external_curve), paste0(" (CAUTION: using external calibration curve)"), ""), "\n [pmr] calib_fixed = ", calib_fixed, ifelse(isTRUE(calib_fixed), paste0(" (CAUTION: using fixed intercept/slope values)"), ""), "\n [pmr] path = ", path, sep = "","\n")
 
   cat(msg2)
   
@@ -120,13 +123,23 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   targets <- unique(data$Target)
   samples <- unique(data$Sample)
   
+  if(!is.null(external_curve)){
+    curve <- read.table(file = paste(folder, files[curve], sep = ""),
+                        sep = ",",
+                        header = TRUE)
+  }
+  
   # initialize list so multiple objects can be returned from main work functions
   list_out <- list()
   
   ####---- Calibrate COL2A1 ----####
   
-  calibration <- calibGblock(data)
-  
+  if(is.null(external_curve)){
+    calibration <- calibGblock(data)
+  } else{
+    calibration <- calibGblock(curve)
+  }
+
   # add plot to list
   list_out[[1]] <- calibration[[1]]
   
@@ -149,7 +162,12 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   # based on default or user set thresholds
   # minimum two reps needed, not sure whether works for more
   
-  calcPMR <- calcPMRGyn(data,targets,samples,intercept, slope,threshold_COL2A1, threshold_targets)
+  if(is.null(external_curve)){
+    calcPMR <- calcPMRGyn(data,targets,samples,intercept, slope,threshold_COL2A1, threshold_targets)
+  } else{
+    calcPMR <- calcPMRGynExt(data,curve,intercept, slope,threshold_COL2A1, threshold_targets)
+  }
+  
   list_out <- append(list_out,calcPMR)
   
   ####---- Make the final summary commercial WIDqEC test ----####
