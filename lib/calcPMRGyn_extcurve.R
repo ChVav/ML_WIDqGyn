@@ -93,7 +93,7 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
   
   # Separate for gblocks
   gblock <- data %>%
-    filter(Sample == "gBLOCK") 
+    filter(Sample %in% c("posCo","PosCo","gBlock", "gBLOCK", "gBlock (+)")) 
   
   ####---- Calculate samples ----####
   ####---- Set suspicious amplifications to NA----####
@@ -209,10 +209,6 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
     calcname = paste0("input_",t)
     data1[varname] = data1[calcname]/data1["input_COL2A1"]
   }
-  
-  # Fully methylated DNA (SSS1 or gBlock) - only gBlock implemented
-  gblock = data1 %>%
-    filter(Sample %in% c("posCo","PosCo","gBlock", "gBLOCK", "gBlock (+)")) 
   
   # For each ref gene divide normalized input sample by normalized input fully methylated DNA *100
   results = data1
