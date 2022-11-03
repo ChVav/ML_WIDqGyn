@@ -22,7 +22,7 @@ calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, t
   
   ####---- Set suspicious amplifications to NA----####
   
-  data = data %>% mutate(ct = as.numeric(ifelse(Cq == "Undetermined", NA, Cq)))
+  #data = data %>% mutate(ct = as.numeric(ifelse(Cq == "Undetermined", NA, Cq)))
   #data = data %>% mutate(ct= as.numeric(ifelse(Amp.Status != "Amp", NA, Cq))) #this option was voted out
   data = data %>% mutate(ct = as.numeric(ifelse(Cq > threshold_targets, NA, Cq)))
   
@@ -55,10 +55,8 @@ calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, t
   
   data = left_join(data, df, by=c("Sample","rep"))
   
-  # When both reps of a sample are undetermined or above the set threshold for COL2A1,
-  # DNA input for this sample was too low, and no PMR could be calculated.
-  # If one out of two reps is undetermined or above the set threshold,
-  # sample should to be reprocessed (COL2A1) or reprocessing is recommended. 
+  # When both reps of a sample are undetermined or above the set threshold for COL2A1, DNA input for this sample was too low, and no PMR could be calculated.
+  # If one out of two reps is undetermined or above the set threshold, sample should to be reprocessed (COL2A1) or reprocessing is recommended. 
   # In these cases, one Ct value is taken forward. 
   low_input_fail = NULL # negative control should always endup here
   reprocess_needed = NULL
@@ -179,7 +177,7 @@ calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, t
     }
   }
   
-  # Save results to list ---
+  # collect results mean+SD CT across plate and plot
   data1 = data1 %>%
     select(Sample, COL2A1, all_of(targets2)) %>%
     as.data.frame()
@@ -188,6 +186,18 @@ calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, t
     select(Sample, COL2A1, all_of(targets2)) %>%
     as.data.frame()
   
+  # Additional warning for When COL2A1 passed for both reps but CT stdev > 2CT
+  warning = data2 %>% 
+    select(Sample,COL2A1) %>%
+    mutate(Warning.SD.COL2A1 = case_when(COL2A1 > 1.5 ~ "warning SD > 1.5 CT", TRUE ~ "PASS"))
+  
+  if(any(warning$Warning.SD.COL2A1== "warning SD > 1.5 CT")){
+    warning = warning %>% filter(Warning.SD.COL2A1=="warning SD > 1.5 CT")
+  } else{
+    warning = NULL
+  }
+  
+  # Save results to list ---
   listResults[[1]] = results #PMR + optional WIDqEC + WIDqEC outcome EUTOPS + WIDqEC interpret TP +WIDqCIN
   listResults[[2]] = data1 #mean Cq
   listResults[[3]] = data2 #stdev Cq
@@ -208,6 +218,12 @@ calcPMRGyn <- function(data,targets,samples,intercept, slope,threshold_COL2A1, t
     listResults[[7]] = reprocess
   } else {
     listResults[[7]] = as.data.frame("none")
+  }
+  
+  if(!is_empty(warning)){ #marks samples for which STDEV COL2A > 2CT (QC warning)
+    listResults[[8]] = warning
+  } else {
+    listResults[[8]] = as.data.frame("none")
   }
 
   return(listResults)

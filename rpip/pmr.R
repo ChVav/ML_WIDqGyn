@@ -64,6 +64,7 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   source(paste0(path_lib,"calcPMRGyn_extcurve.R"))
   source(paste0(path_lib,"calcPMRGyn.R"))
   source(paste0(path_lib,"testWIDqEC.R"))
+  source(paste0(path_lib,"plotPlateCTmeanSD.R"))
   
   # check that threshold targets >= threshold COL2A1
   if(threshold_COL2A1>threshold_targets){
@@ -122,6 +123,7 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   # collect target and sample overviews
   targets <- unique(data$Target)
   samples <- unique(data$Sample)
+  samplesNoctrl <- setdiff(samples,c("STD1", "STD2", "STD3","STD4","STD_1", "STD_2", "STD_3", "STD_4","Std 1", "Std 2", "Std 3", "Std 4","Std_1", "Std_2", "Std_3", "Std_4","Std. 1", "Std. 2", "Std. 3", "Std. 4","NTC_H2O","NTC", "H2O")) #but include gBlocks C("posCo","PosCo","gBlock", "gBLOCK", "gBlock (+)")
   
   if(!is.null(external_curve)){
     curve <- read.table(file = paste(folder, files[curve], sep = ""),
@@ -170,15 +172,19 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   
   list_out <- append(list_out,calcPMR)
   
+  ####----- Plot mean+SD CT COL2A1 ----####
+  
+  list_out[[10]] <- plotCTPlate(samplesNoctrl,"COL2A1",calcPMR[[2]],calcPMR[[3]])
+  
   ####---- Make the final summary commercial WIDqEC test ----####
   
   targets_qEC <- c("GYPC1","GYPC2","ZSCAN12")
   if(all(targets_qEC %in% targets)){
-    testEC <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]])
-    list_out[[9]] <- testEC[[1]] #information in final csv file
+    testEC <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]],calcPMR[[8]])
+    list_out[[11]] <- testEC[[1]] #information in final csv file
     list_out[[2]] <- testEC[[2]] #update final batch results
   }
-
+  
   ####---- Autotest ---- ####
   
   ## note this part is not working yet for current version
@@ -284,11 +290,20 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
   
   if(write.results == TRUE){
     
+    #calibration curve
     ggsave(list_out[[1]],
-           file = paste0(output,experimentname, ".png"),
+           file = paste0(output,experimentname, "_calibcurve.png"),
            width = 5,
            height = 4) 
-    cat("COL2A1 calibration curve saved under", paste0(output,experimentname, ".png\n"))
+    cat("COL2A1 calibration curve saved under", paste0(output,experimentname, "_calibcurve.png\n"))
+    
+    # mean+SD CT COL2A1 across plate (after thresholding)
+    ggsave(list_out[[10]],
+           file = paste0(output,experimentname, "_CTmeanSD.png"),
+           width = 85,
+           height = 80,
+           unit = "mm")
+    cat("COL2A1 mean CT+SD across plate (after thresholding) saved under", paste0(output,experimentname, "_CTmeanSD.png\n"))
     
     wb <- createWorkbook()
     addWorksheet(wb, "Results PMR")
@@ -300,27 +315,14 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
     addWorksheet(wb, "Input BC-DNA conc")
     writeDataTable(wb=wb, sheet = 4, x= list_out[[5]], rowNames=FALSE)
     addWorksheet(wb, "low DNA input") #samples for which COL2A1 failed in both reps, should have negative controls
-    if(is_empty(list_out[[6]])){
-      low_input_fail <- as.data.frame("you have some amplification in the NTC_H2O")
-      writeDataTable(wb=wb, sheet = 5, x= list_out[[6]], rowNames=FALSE)
-    } else{
-      writeDataTable(wb=wb, sheet = 5, x= list_out[[6]], rowNames=FALSE) 
-    }
+    writeDataTable(wb=wb, sheet = 5, x= list_out[[6]], rowNames=FALSE)
     addWorksheet(wb, "Reprocessing needed")# samples for which for only one of two reps COL2A1 failed
-    if(!is_empty(list_out[[7]])){
-      writeDataTable(wb = wb, sheet = 6, x = list_out[[7]], rowNames=FALSE)
-    } else{
-      reprocess_needed <- as.data.frame("none")
-      writeDataTable(wb = wb, sheet = 6, x = list_out[[7]], rowNames=FALSE)
-    }
+    writeDataTable(wb = wb, sheet = 6, x = list_out[[7]], rowNames=FALSE)
     addWorksheet(wb, "Reprocessing recommended")# samples for which for only one of two reps target amplified
-    if(!is_empty(list_out[[8]])){
-      writeDataTable(wb = wb, sheet = 7, x = list_out[[8]], rowNames=FALSE)
-    } else{
-      reprocess <- as.data.frame("none")
-      writeDataTable(wb = wb, sheet = 7, x = list_out[[8]], rowNames=FALSE)
-    }
-    
+    writeDataTable(wb = wb, sheet = 7, x = list_out[[8]], rowNames=FALSE)
+    addWorksheet(wb, "Warning COL2A1 SD high")# samples for which SD CT COL2A1 > 1.5
+    writeDataTable(wb=wb, sheet = 8, x= list_out[[9]], rowNames=FALSE)
+   
     saveWorkbook(wb, paste0(output, experimentname, ".xlsx"))
     
     cat("Output file created.")

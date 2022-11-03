@@ -256,7 +256,7 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
     }
   }
   
-  # Save results to list ---
+  # collect results mean+SD CT
   data1 = data1 %>%
     select(Sample, COL2A1, all_of(targets2)) %>%
     as.data.frame()
@@ -265,6 +265,18 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
     select(Sample, COL2A1, all_of(targets2)) %>%
     as.data.frame()
   
+  # Additional warning for When COL2A1 passed for both reps but CT stdev > 2CT
+  warning = data2 %>% 
+    select(Sample,COL2A1) %>%
+    mutate(Warning.SD.COL2A1 = case_when(COL2A1 > 1.5 ~ "warning SD > 1.5 CT", TRUE ~ "PASS"))
+  
+  if(any(warning$Warning.SD.COL2A1== "warning SD > 1.5 CT")){
+    warning = warning %>% filter(Warning.SD.COL2A1=="warning SD > 1.5 CT")
+  } else{
+    warning = NULL
+  }
+  
+  # Save results to list ---
   listResults[[1]] = results #PMR + optional WIDqEC + WIDqEC outcome EUTOPS + WIDqEC interpret TP +WIDqCIN
   listResults[[2]] = data1 #mean Cq
   listResults[[3]] = data2 #stdev Cq
@@ -285,6 +297,12 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
     listResults[[7]] = reprocess
   } else {
     listResults[[7]] = as.data.frame("none")
+  }
+  
+  if(!is_empty(warning)){ #marks samples for which STDEV COL2A > 2CT (QC warning)
+    listResults[[8]] = warning
+  } else {
+    listResults[[8]] = as.data.frame("none")
   }
   
   return(listResults)

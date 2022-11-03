@@ -90,6 +90,13 @@ server <- function(input, output) {
              width = 5,
              height = 4) 
       
+      # save CT plot to temporary dir
+      ggsave(myResults()[[10]],
+             file = paste0(temp_dir, "/","CTCOL2A1_MeanStdev.png"),
+             width = 85,
+             height = 80,
+             unit = "mm") 
+      
       # save batched results to temporary dir
       wb <- createWorkbook()
       
@@ -107,12 +114,14 @@ server <- function(input, output) {
       writeDataTable(wb = wb, sheet = 6, x = myResults()[[7]], rowNames=FALSE) # samples for which for only one of two reps COL2A1 failed
       addWorksheet(wb, "Reprocessing recommended")
       writeDataTable(wb = wb, sheet =7, x = myResults()[[8]], rowNames=FALSE) # samples for which for only one of two reps target amplified
+      addWorksheet(wb, "Warning COL2A1 SD high")
+      writeDataTable(wb=wb, sheet = 8, x= myResults()[[9]], rowNames=FALSE)# samples for which SD CT COL2A1 > 1.5
 
       saveWorkbook(wb, paste0(temp_dir, "/","batch_results.xlsx"))
       
       # When WID-qEC targets are on the plate, save final result summary separately to temporary dir
-      if(length(myResults())>8){
-        write.csv(myResults()[[9]], 
+      if(length(myResults())>10){
+        write.csv(myResults()[[11]], 
                   file=paste0(temp_dir, "/", "final_results_commercial_WIDqEC.csv"), 
                   row.names=FALSE, 
                   fileEncoding = "UTF-8")

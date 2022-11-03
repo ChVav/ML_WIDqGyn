@@ -1,4 +1,40 @@
 
+####---- testing before committing to v1.2.0----####
+
+source("../../../rpip/pmr.R")
+
+#### old thresholds, on plate calibration----
+test <- pmr(folder="../../../data/dummy/1-input/", 
+            output="test4/", 
+            "dummytest",
+            write.results = TRUE,
+            threshold_COL2A1=35,
+            threshold_targets=50,
+            external_curve=NULL,
+            calib_fixed = FALSE,
+            fix_intercept = 36.9,
+            fix_slope = -3.4,
+            path = "defined",
+            autotest= FALSE,
+            path_lib="C://Users/charl/Desktop/Charlotte_DevOp/ML_WIDqGYn/lib/")
+
+
+#### changed 2 COL2A1 values manually
+test <- pmr(folder="../../../data/dummy/3-input/", 
+            output="test5/", 
+            "dummytest",
+            write.results = TRUE,
+            threshold_COL2A1=35,
+            threshold_targets=50,
+            external_curve=NULL,
+            calib_fixed = FALSE,
+            fix_intercept = 36.9,
+            fix_slope = -3.4,
+            path = "defined",
+            autotest= FALSE,
+            path_lib="C://Users/charl/Desktop/Charlotte_DevOp/ML_WIDqGYn/lib/")
+
+
 ####---- testing before committing to v1.1.0----####
 
 source("../../../rpip/pmr.R")

@@ -21,6 +21,7 @@ calculate_pmr <- function(data,
   source("../../lib/calibGblock.R")
   source("../../lib/calcPMRGyn.R")
   source("../../lib/testWIDqEC.R")
+  source("../../lib/plotPlateCTmeanSD.R")
   
   # check that threshold targets >= threshold COL2A1
   if(threshold_COL2A1>threshold_targets){
@@ -30,6 +31,7 @@ calculate_pmr <- function(data,
   # collect target and sample overviews
   targets <- unique(data$Target)
   samples <- unique(data$Sample)
+  samplesNoctrl <- setdiff(samples,c("STD1", "STD2", "STD3","STD4","STD_1", "STD_2", "STD_3", "STD_4","Std 1", "Std 2", "Std 3", "Std 4","Std_1", "Std_2", "Std_3", "Std_4","Std. 1", "Std. 2", "Std. 3", "Std. 4","NTC_H2O","NTC", "H2O")) #but include gBlocks C("posCo","PosCo","gBlock", "gBLOCK", "gBlock (+)")
   
   # initialize list so multiple objects can be returned from function 
   list_out <- list()
@@ -63,12 +65,16 @@ calculate_pmr <- function(data,
   calcPMR <- calcPMRGyn(data,targets,samples,intercept, slope,threshold_COL2A1, threshold_targets)
   list_out <- append(list_out,calcPMR)
   
+  ####----- Plot mean+SD CT COL2A1 ----####
+  
+  list_out[[10]] <- plotCTPlate(samplesNoctrl,"COL2A1",calcPMR[[2]],calcPMR[[3]])
+  
   ####---- Make the final summary commercial WIDqEC test ----####
   
   targets_qEC <- c("GYPC1","GYPC2","ZSCAN12")
   if(all(targets_qEC %in% targets)){
-    testEC <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]])
-    list_out[[9]] <- testEC[[1]] #information in final csv file
+    testEC <- testWIDqEC(calcPMR[[1]],samples,calcPMR[[5]],calcPMR[[6]],calcPMR[[7]],calcPMR[[8]])
+    list_out[[11]] <- testEC[[1]] #information in final csv file
     list_out[[2]] <- testEC[[2]] #update final batch results
   }
   
