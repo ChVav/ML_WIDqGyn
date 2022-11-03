@@ -2,7 +2,7 @@
 # interpretation based on set thresholds
 # sample QC
 
-testWIDqEC <- function(results,samples,low_input_fail,reprocess_needed,reprocess){
+testWIDqEC <- function(results,samples,low_input_fail,reprocess_needed,reprocess, warning){
   
   require(dplyr)
   require(tidyverse)
@@ -45,13 +45,17 @@ testWIDqEC <- function(results,samples,low_input_fail,reprocess_needed,reprocess
       mutate(QC=case_when(
         Sample %in% low_input_fail$sample ~ "Insufficient DNA", #COL2A1 did not amplify in any of the reps 
         Sample %in% reprocess_needed[,1] ~ "Reprocessing recommended, insufficient DNA in one rep", # samples for which for only one of two reps COL2A1 failed
-        Sample %in% reprocess[,1] ~ "Some targets only amplified in one of the reps",
+        Sample %in% reprocess[,1] & !Sample %in% warning[,1] ~ "Some targets only amplified in one of the reps",
+        !Sample %in% reprocess[,1] & Sample %in% warning[,1] ~ "STDEV CT COL2A1 exceeds 1.5 cycles",
+        Sample %in% reprocess[,1] & Sample %in% warning[,1] ~ "Some targets only amplified in one of the reps;STDEV CT COL2A1 exceeds 1.5 cycles",
         TRUE ~ "PASS" #all ok
       ))} else{
         QC <- QC %>%
           mutate(QC=case_when(
             Sample %in% reprocess_needed[,1] ~ "Reprocessing recommended, insufficient DNA in one rep", # samples for which for only one of two reps COL2A1 failed
-            Sample %in% reprocess[,1] ~ "Some targets only amplified in one of the reps",
+            Sample %in% reprocess[,1] & !Sample %in% warning[,1] ~ "Some targets only amplified in one of the reps",
+            !Sample %in% reprocess[,1] & Sample %in% warning[,1] ~ "STDEV CT COL2A1 exceeds 1.5 cycles",
+            Sample %in% reprocess[,1] & Sample %in% warning[,1] ~ "Some targets only amplified in one of the reps;STDEV CT COL2A1 exceeds 1.5 cycles",
             TRUE ~ "PASS" #all ok
           ))
       }

@@ -1,4 +1,10 @@
 
+## [1.2.1] - 03.11.2022
+
+## Added
+* output additional list checking whether SD for COL2A1 between reps > 1.5 CT, gives warning in QC for WID-qEC
+* plot with mean+SD CT COL2A1 for all samples on plate
+
 ## [1.1.1] - 27.10.2022 - Released
 
 ### Added

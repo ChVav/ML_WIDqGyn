@@ -1,0 +1,12 @@
+[pmr] Thu Nov  3 15:30:45 2022
+[pmr] Platform: windows
+[pmr] Settings:
+ [pmr] folder = ../../../data/dummy/1-input/
+ [pmr] output = test4/
+ [pmr] experiment name = dummytest
+ [pmr] threshold_COL2A1 = 35
+ [pmr] threshold_targets = 50
+ [pmr] external_curve = 
+ [pmr] calib_fixed = FALSE
+ [pmr] path = defined
+
