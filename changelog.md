@@ -1,5 +1,5 @@
 
-## [1.2.1] - 03.11.2022
+## [1.2.0] - 03.11.2022
 
 ## Added
 * output additional list checking whether SD for COL2A1 between reps > 1.5 CT, gives warning in QC for WID-qEC
