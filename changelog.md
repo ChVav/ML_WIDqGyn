@@ -1,4 +1,11 @@
-## [1.2.1] - 14.12.2022 - Released (version in Dropbox)
+
+## [1.2.2] - 14.12.2022 - Released (version in Dropbox)
+
+### Added
+
+in /shiny, excecutables (.sh) added for unix. (not tested) 
+
+## [1.2.1] - 14.12.2022
 
 Lab team transitioned to using new standards, with additinal dilution step, highest concentration left out! <br>
 Tiny change in /lib/calibGblock.R
@@ -10,7 +17,7 @@ For old standards, it is better to use an older version of the pipeline, if one 
 * output additional list checking whether SD for COL2A1 between reps > 1.5 CT, gives warning in QC for WID-qEC
 * plot with mean+SD CT COL2A1 for all samples on plate
 
-## [1.1.1] - 27.10.2022 - Released (version in Dropbox)
+## [1.1.1] - 27.10.2022
 
 ### Added
 * in /rpip, implemented option for using external calibration curve
