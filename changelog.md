@@ -3,7 +3,8 @@
 
 ### Added
 
-in /shiny, excecutables (.sh) added for unix. (not tested) 
+* in /shiny, excecutables (.sh) added for unix. (not tested) 
+* added guidelines
 
 ## [1.2.1] - 14.12.2022
 
