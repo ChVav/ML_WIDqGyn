@@ -19,10 +19,10 @@ calibGblock <- function(data){
                                     (Sample %in% c("Std 1", "Std 2", "Std 3", "Std 4")) | 
                                     (Sample %in% c("Std_1", "Std_2", "Std_3", "Std_4")) | 
                                     (Sample %in% c("Std. 1", "Std. 2", "Std. 3", "Std. 4"))))) %>%
-    mutate(x = case_when(Sample %in% c("STD1", "STD_1", "Std 1", "Std_1", "Std. 1") ~ 6, # concentration = log10(copy numbers/5uL)
-                         Sample %in% c("STD2", "STD_2", "Std 2", "Std_2", "Std. 2") ~ 5,
-                         Sample %in% c("STD3", "STD_3", "Std 3", "Std_3", "Std. 3") ~ 4,
-                         Sample %in% c("STD4", "STD_4", "Std 4", "Std_4", "Std. 4") ~ 3)) %>%
+    mutate(x = case_when(Sample %in% c("STD1", "STD_1", "Std 1", "Std_1", "Std. 1") ~ 5, # concentration = log10(copy numbers/5uL)
+                         Sample %in% c("STD2", "STD_2", "Std 2", "Std_2", "Std. 2") ~ 4,
+                         Sample %in% c("STD3", "STD_3", "Std 3", "Std_3", "Std. 3") ~ 3,
+                         Sample %in% c("STD4", "STD_4", "Std 4", "Std_4", "Std. 4") ~ 2)) %>%
     mutate(ct = ifelse(Cq == "Undetermined", NA, as.numeric(Cq)))
   
   fit = lm(ct ~ x, data = plot)
