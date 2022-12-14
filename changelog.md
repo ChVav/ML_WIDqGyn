@@ -1,11 +1,16 @@
+## [1.2.1] - 14.12.2022 - Released (version in Dropbox)
+
+Lab team transitioned to using new standards, with additinal dilution step, highest concentration left out! <br>
+Tiny change in /lib/calibGblock.R
+For old standards, it is better to use an older version of the pipeline, if one wants the DNA concentrations in the samples to be calculated correctly.
 
 ## [1.2.0] - 03.11.2022
 
-## Added
+### Added
 * output additional list checking whether SD for COL2A1 between reps > 1.5 CT, gives warning in QC for WID-qEC
 * plot with mean+SD CT COL2A1 for all samples on plate
 
-## [1.1.1] - 27.10.2022 - Released
+## [1.1.1] - 27.10.2022 - Released (version in Dropbox)
 
 ### Added
 * in /rpip, implemented option for using external calibration curve

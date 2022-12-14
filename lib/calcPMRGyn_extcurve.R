@@ -265,7 +265,7 @@ calcPMRGynExt <- function(samplesdata,gblockdata,intercept, slope,threshold_COL2
     select(Sample, COL2A1, all_of(targets2)) %>%
     as.data.frame()
   
-  # Additional warning for When COL2A1 passed for both reps but CT stdev > 2CT
+  # Additional warning for When COL2A1 passed for both reps but CT stdev > 1.5 CT
   warning = data2 %>% 
     select(Sample,COL2A1) %>%
     mutate(Warning.SD.COL2A1 = case_when(COL2A1 > 1.5 ~ "warning SD > 1.5 CT", TRUE ~ "PASS"))
