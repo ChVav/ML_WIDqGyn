@@ -1,5 +1,11 @@
 
-## [1.2.2] - 14.12.2022 - Released (version in Dropbox)
+## [1.3.0] - 10.01.2023 - Released (version in Dropbox)
+
+### Added
+
+* in /shiny, new app to generate platesetup for a separate WID-qEC test and a separate WID-qCIN test. (WID-qGYN layoutunchanged)
+
+## [1.2.2] - 14.12.2022
 
 ### Added
 
