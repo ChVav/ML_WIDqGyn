@@ -5,7 +5,8 @@ Libraries needed: shiny, readxl, stringr and dplyr.
 
 ### Step 1
 GeneratePlateLayoutGYN will create the plate layout for a qWID-GYN test from a sample list drawn in Excel (up to 42 samples).
-Layout version where reps are pipeted underneath each other
+GeneratePlateLayoutEC or GeneratePlateLayoutCIN will create the plate layouts for the qWID-EC and qWID-CIN tests respectively (up to 90 samples).
+Layout version where reps are pipeted underneath each other.
 Double-click GeneratePlatelayoutGYN.bat (or a short-cut thereof), and follow instructions in the browser.
 
 ### Step 2

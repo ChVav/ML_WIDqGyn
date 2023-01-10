@@ -15,22 +15,24 @@ A separate repo for the Shiny app CalculateWIDqEC used for initial commercializa
 ## Full Analysis workflow WID-qGYN in R
 
 ### Step 1
-GeneratePlateLayout function will create the plate layout for a qWID-GYN test from a sample list drawn in Excel (up to 42 samples).
+GeneratePlateLayout Apps (Shiny only) will create the plate layout for a (full) qWID-GYN test from a sample list drawn in Excel (up to 42 samples), for a qWID-EC test or for a qWID-CIN test (up to 90 samples). <br>
+Obviously, your plates should be pipetted accordingly. <br>
+Make sure R is installed and in your environment path. <br>
+Libraries needed: shiny, readxl, stringr and dplyr. <br>
+For Windows: e.g., Double-click GeneratePlatelayoutGYN.bat (or a short-cut thereof), and follow instructions in the browser. <br>
+For Mac/Unix: could use the .sh scripts (not yet tested).
 
 ### Step 2
 The resulting csv file from step 1 can be used to analyze a qPCR run (with correct layout) from a Quantstudio 7 with the Design & Analysis Software 2.5.0 (Applied Biosystms TM).
 
 ### Step 3
-Use CalculatePMRGyn function is used to estimate Percentage Methylated Reference (PMR) values for the individual targets.
+The CalculatePMRGyn function (Shiny or R) is used to estimate Percentage Methylated Reference (PMR) values for the individual targets.
+
+Users inexperienced with R should run the app version of Step3 in the pipeline: <br>
+Double-click CalculatePMRGyn.bat (or a short-cut thereof), and follow instructions in the browser. Here the The WID-qEC (+diagnosis) and WID-qCIN is also calculated, depending on the targets included. <br>
+
+In R, additional functions are implemented so that external standards or a fixed intercept/slow can be used in case the standards on the plate have failed.
 
 
-## Instructions for using the Shiny app
-Users inexperienced with R may run the app version of the pipeline.
 
-Make sure R is installed and in your environment path.
-Libraries needed: shiny, readxl, stringr and dplyr.
 
-For Step1: Double-click GeneratePlatelayoutGYN.bat (or a short-cut thereof), and follow instructions in the browser. <br>
-For Step2: Double-click CalculatePMRGyn.bat (or a short-cut thereof), and follow instructions in the browser. Here the The WID-qEC (+diagnosis) and WID-qCIN is also calculated.
-
-In contrast to the original pipeline, there is no way to use external standards or a fixed intercept/slow in case the standards on the plate have failed.
