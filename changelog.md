@@ -1,3 +1,7 @@
+## [1.3.1] - 27.02.2023 - Released (Version in Dropbox)
+
+### Fixed
+* in /lib, fixed label position regression coefficients on plot
 
 ## [1.3.0] - 10.01.2023 - Released (version in Dropbox)
 

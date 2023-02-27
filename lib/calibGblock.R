@@ -51,7 +51,7 @@ calibGblock <- function(data){
     xlab("Concentration \n [ log(copy number/5uL) ]") +
     ylab("Ct value")  +
     annotate("text",
-             x = 5,
+             x = 4,
              y = 28,
              label = anno,
              hjust = 0,
