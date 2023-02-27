@@ -3,7 +3,7 @@
 ### Fixed
 * in /lib, fixed label position regression coefficients on plot
 
-## [1.3.0] - 10.01.2023 - Released (version in Dropbox)
+## [1.3.0] - 10.01.2023
 
 ### Added
 
