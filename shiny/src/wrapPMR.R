@@ -5,7 +5,7 @@
 # todo: remove this here?
 
 calculate_pmr <- function(data,
-                          threshold_COL2A1=30,
+                          threshold_COL2A1=35,
                           threshold_targets=38,
                           external_curve=NULL,
                           fix_intercept=36.9, #these values come from meta-analysis
