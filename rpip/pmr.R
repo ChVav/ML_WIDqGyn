@@ -21,7 +21,7 @@
 
 pmr <- function(folder=NULL, output=NULL, experimentname,
                 write.results = TRUE,
-                threshold_COL2A1=30,
+                threshold_COL2A1=35,
                 threshold_targets=38,
                 external_curve=NULL, #filename external curve in folder
                 calib_fixed = FALSE,

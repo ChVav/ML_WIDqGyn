@@ -1,4 +1,8 @@
-## [1.3.1] - 27.02.2023 - Released (Version in Dropbox)
+
+## [1.3.2] - 28.02.2023 - Released (Version in Dropbox)
+* COL2A1 Ct threshold=35 (36 or higher is kicked out) (reversed back)
+
+## [1.3.1] - 27.02.2023
 
 ### Fixed
 * in /lib, fixed label position regression coefficients on plot
