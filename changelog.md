@@ -1,6 +1,11 @@
 
 ## [1.3.2] - 28.02.2023 - Released (Version in Dropbox)
+
+### Changed
 * COL2A1 Ct threshold=35 (36 or higher is kicked out) (reversed back)
+
+### Added 
+* in /shiny, batch results Excel workbook now includes log file with pipeline version and pipeline settings
 
 ## [1.3.1] - 27.02.2023
 

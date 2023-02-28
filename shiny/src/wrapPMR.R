@@ -1,16 +1,16 @@
 # wraps COL2A1 calibration, PMR calculation and testWIDqEC main work functions, based on user input
-# contact: charlottevavourakis@gmail.com
-# under development for Shiny App GYN test, Last update October 26, 2022
 # Option for using fixed intercept or slope, or external calibration curve, will only be functional in the bare R-pipeline, not in the Shiny apps
-# todo: remove this here?
 
 calculate_pmr <- function(data,
-                          threshold_COL2A1=35,
-                          threshold_targets=38,
-                          external_curve=NULL,
-                          fix_intercept=36.9, #these values come from meta-analysis
-                          fix_slope=-3.4,
-                          calib_fixed=FALSE){
+                          threshold_COL2A1,
+                          threshold_targets,
+                          external_curve,
+                          fix_intercept,
+                          fix_slope,
+                          calib_fixed,
+                          inconclusive, 
+                          inconsistent, 
+                          version){
   
   ####---- Prepare ----####
   
@@ -77,6 +77,18 @@ calculate_pmr <- function(data,
     list_out[[11]] <- testEC[[1]] #information in final csv file
     list_out[[2]] <- testEC[[2]] #update final batch results
   }
+  
+  ###---- Create log file ----####
+  L4 <- ifelse(calib_fixed==FALSE,"on-plate-calibration","external standard curve used")
+  L5 <- ifelse(inconclusive==FALSE, "Inconclusive amplification not disregarded","Inconclusive amplifications disregarded")
+  L6 <- ifelse(inconsistent==FALSE,"All other amplifications carried forward", "Inconsistent targets rejected")
+  loginfo <- c(version,
+           paste0("CT threshold COL2A1 = ", threshold_COL2A1),
+           paste0("CT threshold all other targets = ", threshold_targets),
+           L4,
+           L5,
+           L6)
+  list_out[[11]] <- as.data.frame(loginfo)
   
   ####---- Return or save results ----####
   

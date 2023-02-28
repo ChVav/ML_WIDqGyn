@@ -14,6 +14,20 @@ library(openxlsx)
 library(ggplot2)
 library(ggpubr)
 
+# Determine pipeline version
+version <- read.table("../../version.csv", header=FALSE) %>% pull(V1)
+version <- paste0("Shiny ",version)
+
+# Defined Settings
+threshold_COL2A1 <- 35
+threshold_targets <- 38
+external_curve <- NULL
+fix_intercept <- 36.9 #these values come from meta-analysis, but will not be used
+fix_slope <- -3.4
+calib_fixed <- FALSE
+inconclusive <- FALSE #when true, inconclusive reactions will be removed, not yet implemented
+inconsistent <- FALSE #when true, only CTs for targets for which only one rep amplified will be set to 0
+
 # source main wrapper function
 source("./wrapPMR.R")
 
@@ -56,7 +70,7 @@ server <- function(input, output) {
     data$Sample <- as.character(data$Sample)
    
     # calculate PMR
-    results <- calculate_pmr(data)
+    results <- calculate_pmr(data, threshold_COL2A1, threshold_targets, external_curve, fix_intercept, fix_slope, calib_fixed, inconclusive, inconsistent, version)
     results
   })
   
@@ -116,6 +130,8 @@ server <- function(input, output) {
       writeDataTable(wb = wb, sheet =7, x = myResults()[[8]], rowNames=FALSE) # samples for which for only one of two reps target amplified
       addWorksheet(wb, "Warning COL2A1 SD high")
       writeDataTable(wb=wb, sheet = 8, x= myResults()[[9]], rowNames=FALSE)# samples for which SD CT COL2A1 > 1.5
+      addWorksheet(wb,"Log")
+      writeDataTable(wb=wb, sheet = 9, x=myResults()[[11]], rowNames=FALSE, colNames=FALSE) # save pipeline version and settings
 
       saveWorkbook(wb, paste0(temp_dir, "/","batch_results.xlsx"))
       

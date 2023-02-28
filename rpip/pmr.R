@@ -31,6 +31,10 @@ pmr <- function(folder=NULL, output=NULL, experimentname,
                 autotest= FALSE,
                 path_lib="/eutops/scripts/methylight/ML_WIDqGYn/lib/"){
   
+  # Determine pipeline version
+  version <- read.table("../version.csv", header=FALSE) %>% pull(V1)
+  version <- paste0("R ",version)
+  
   ####---- Prepare ----####
   
   # load libraries
