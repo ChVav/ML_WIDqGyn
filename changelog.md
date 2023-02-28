@@ -1,4 +1,7 @@
 
+### Fixed
+* in /shiny, logfile content logic corrected
+
 ## [1.3.2] - 28.02.2023 - Released (Version in Dropbox)
 
 ### Changed

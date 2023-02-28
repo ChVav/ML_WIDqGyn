@@ -79,7 +79,7 @@ calculate_pmr <- function(data,
   }
   
   ###---- Create log file ----####
-  L4 <- ifelse(calib_fixed==FALSE,"on-plate-calibration","external standard curve used")
+  L4 <- ifelse(!is.null(external_curve),"External standard curve used",ifelse(calib_fixed==TRUE,"Fixed regression parameters used","on-plate-calibration"))
   L5 <- ifelse(inconclusive==FALSE, "Inconclusive amplification not disregarded","Inconclusive amplifications disregarded")
   L6 <- ifelse(inconsistent==FALSE,"All other amplifications carried forward", "Inconsistent targets rejected")
   loginfo <- c(version,
