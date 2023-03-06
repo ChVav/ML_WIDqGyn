@@ -1,4 +1,8 @@
 
+### Added
+
+* in /lib, added function extract_Cq_raw() to extract raw Cq values from each duplicate. Input CSV file assumes 22 header lines from QS
+
 ### Fixed
 * in /shiny, logfile content logic corrected
 
