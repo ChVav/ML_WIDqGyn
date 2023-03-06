@@ -1,4 +1,6 @@
 
+## [1.3.3] - 06.03.2023 - Released (Version in Dropbox)
+
 ### Added
 
 * in /lib, added function extract_Cq_raw() to extract raw Cq values from each duplicate. Input CSV file assumes 22 header lines from QS

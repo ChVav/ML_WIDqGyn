@@ -1,3 +1,6 @@
+# Author: Charlotte Vavourakis
+#
+
 # function to load CSV and extract raw Cq values for each target
 
 extractCqRaw <- function(input_file,output_file){
